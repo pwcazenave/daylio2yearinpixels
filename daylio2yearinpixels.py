@@ -80,7 +80,7 @@ def write_year_in_pixels(daylio, output, year=None):
     for (day, felt) in zip(daylio[0], daylio[1]):
         if day.year == year:
             # Year in Pixels doesn't support leap days, so drop them here.
-            if calendar.isleap(year) and day.month == 2 and day.day == 28:
+            if calendar.isleap(year) and day.month == 2 and day.day == 29:
                 print('Skipping leap day.')
                 pass
 
@@ -100,6 +100,6 @@ def write_year_in_pixels(daylio, output, year=None):
 
 if __name__ == '__main__':
 
-    daylio = read_daylio(sys.argv[1])
-    write_year_in_pixels(daylio, sys.argv[2], year=2017)
+    daylio = read_daylio(sys.argv[2])
+    write_year_in_pixels(daylio, sys.argv[3], year=int(sys.argv[1]))
 
