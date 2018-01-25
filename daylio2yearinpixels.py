@@ -1,5 +1,6 @@
 from __future__ import division
 
+import sys
 import pandas as pd
 import numpy as np
 import calendar
@@ -89,6 +90,6 @@ def write_year_in_pixels(daylio, output, year=None):
 
 if __name__ == '__main__':
 
-    daylio = read_daylio('daylio_export.csv')
-    write_year_in_pixels(daylio, 'test.txt', year=2017)
+    daylio = read_daylio(sys.argv[1])
+    write_year_in_pixels(daylio, sys.argv[2], year=2017)
 
