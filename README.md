@@ -1,6 +1,6 @@
 # Daylio export to Year in Pixels
 
-Small python tool to convert from Daylio formatted data into [http://year-in-pixels.glitch.me][Year in Pixels] formatted data.
+Small python tool to convert from Daylio formatted data into [http://year-in-pixels.glitch.me](Year in Pixels) formatted data.
 
 ## Usage
 
