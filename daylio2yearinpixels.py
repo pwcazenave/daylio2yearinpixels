@@ -1,3 +1,5 @@
+""" Convert a Daylio export CSV to the format needed for Year in Pixels. """
+
 import sys
 import calendar
 
