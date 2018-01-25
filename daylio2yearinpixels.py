@@ -87,9 +87,10 @@ def write_year_in_pixels(daylio, output, year=None):
             # 1st of January needs to be 0, not 1
             dayofyear = int(day.strftime('%j')) - 1
 
-            # We have to remove a day to the index to account for Life in
-            # Pixels not supporting leap years, but only in leap years.
-            if calendar.isleap(year) and day.month >= 2 and dayofyear > 60:
+            # We have to remove a day from the index to account for Life in
+            # Pixels not supporting leap years, but only in leap years and
+            # only after the 29th February (the 60th day of the year).
+            if calendar.isleap(year) and dayofyear > 60:
                 dayofyear -= 1
 
             yip[dayofyear] = felt
