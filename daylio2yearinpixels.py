@@ -75,7 +75,7 @@ def write_year_in_pixels(daylio, output, year=None):
         year = daylio[0][0].year
 
     # Year in Pixels doesn't support leap days.
-    yip = [0] * 365
+    yip = ['0'] * 365
 
     for (day, felt) in zip(daylio[0], daylio[1]):
         if day.year == year:
