@@ -10,7 +10,16 @@ def read_daylio(filename):
     """
     Read the daylio exported data.
 
-    Return the dates and numeric mood.
+    Parameters
+    ----------
+    filename : str
+        The Daylio CSV file path.
+
+    Returns
+    -------
+    daylio : tuple
+        Tuple of the dates (as datetime objects) and the recorded moods
+        (as a list of numbers as strings).
 
     """
 
