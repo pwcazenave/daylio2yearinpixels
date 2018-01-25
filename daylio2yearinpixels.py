@@ -1,8 +1,6 @@
 from __future__ import division
 
 import sys
-import pandas as pd
-import numpy as np
 import calendar
 
 from datetime import datetime
@@ -16,28 +14,40 @@ def read_daylio(filename):
 
     """
 
-    # Manually specify the column headers so we can handle irregular number of
-    # columns (terrible, terrible output formatting from daylio).
+    # Parse the Daylio output.
     columns = ['year', 'date', 'day', 'time', 'mood', 'activities', 'note']
-    mood = pd.read_csv(filename, names=columns, skiprows=1)
+    mood = {c: [] for c in columns}
+    with open(filename, 'r') as f:
+        next(f)  # skip header
+        lines = f.readlines()
+        for line in lines:
+            line = line.strip().split(',')
+            mood['year'].append(line[0])
+            mood['date'].append(line[1])
+            mood['day'].append(line[2])
+            mood['time'].append(line[3])
+            mood['mood'].append(line[4])
+            mood['activities'].append(line[5])
+            mood['note'].append(line[6])
 
-    # Convert the horrible dates to datetimes.
+    # Convert the dates to datetime objects.
+    date_format = '%Y %d %B'
     daymonth = [i.split(' ') for i in mood['date']]
-    dates = np.column_stack((mood['year'].astype(str),
-                             ['{:02d} {}'.format(int(i[0]), i[1]) for i in daymonth]))
-    horrid = '%Y %d %B'
-    dates = [datetime.strptime(' '.join(i), horrid) for i in dates]
+    dates = ['{y:04d} {d:02d} {m}'.format(y=int(i[0]), m=i[1][1], d=int(i[1][0])) for i in zip(mood['year'], daymonth)]
+    dates = [datetime.strptime(i, date_format) for i in dates]
 
     # Convert mood to a numeric value (higher = better).
-    convert = {'rad': 5,
-               'good': 4,
-               'meh': 3,
-               'fugly': 2,
-               'awful': 1}
+    convert = {'rad': '5',
+               'good': '4',
+               'meh': '3',
+               'fugly': '2',
+               'awful': '1'}
     for entry in convert:
-        mood[mood['mood'] == entry] = convert[entry]
+        for count, m in enumerate(mood['mood']):
+            if m == entry:
+                mood['mood'][count] = convert[entry]
 
-    return dates, mood['mood'].tolist()
+    return (dates, mood['mood'])
 
 
 def write_year_in_pixels(daylio, output, year=None):
@@ -65,7 +75,7 @@ def write_year_in_pixels(daylio, output, year=None):
         year = daylio[0][0].year
 
     # Year in Pixels doesn't support leap days.
-    yip = np.zeros(365)
+    yip = [0] * 365
 
     for (day, felt) in zip(daylio[0], daylio[1]):
         if day.year == year:
@@ -84,7 +94,8 @@ def write_year_in_pixels(daylio, output, year=None):
 
             yip[dayofyear] = felt
 
-    np.savetxt(output, yip, '%d', newline='')
+    with open(output, 'wt') as f:
+        f.write(''.join(yip))
 
 
 if __name__ == '__main__':
